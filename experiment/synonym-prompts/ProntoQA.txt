@@ -1,0 +1,337 @@
+You are given a free‐text context describing a series of categorical statements and a question. Your task is to convert it into a Prolog‐style logic program in five steps:
+
+1.   Synonym Variable Table    
+   • Scan the context and identify all concept expressions that refer to the same underlying Unified Variable (e.g. “television” and “TV”).  
+   • Create a Markdown table with two columns: the unified Variable name and all its synonyms from the context.
+
+2.   Predicates:    
+   • List each predicate with its arity and a brief English description in the format:  
+     `PredicateName($x, bool) ::: Description`
+
+3.   Facts:    
+   • Extract every explicit “X is a Y” statement from the context and encode it as a fact:  
+     `PredicateName(Entity, True)`  
+   • Make sure to use the unified predicate names from your synonym table.
+
+4.   Rules:    
+   • For each “Every/Each A is B” or “A are not B” sentence, write a rule in the form:  
+     `PredicateA($x, True) >>> PredicateB($x, True)`  
+     or  
+     `PredicateA($x, True) >>> PredicateB($x, False)`  
+   • Use the unified predicate names consistently.
+
+5.   Query:    
+   • Translate the final question into a query, e.g.:  
+     `PredicateName(Target, True)` or `PredicateName(Target, False)`
+
+Do not include any narrative text or explanations—only the synonym table and the Prolog program segments (Predicates, Facts, Rules, Query).
+
+### Input
+Context:
+television are not shy. TV are toilet. WC is aggressive. Each that place for relieving oneself is a telephone. phone are not wooden. that device for making calls are refrigerator. fridge are red. Every that box for keeping food cold is a personal computer. Each PC is opaque. personal computer are compact disc. digital versatile disc are sour. CD are not sour. compact disc are Global Positioning System. GPS are earthy. Every Global Positioning System is an air conditioner. AC are small. air conditioner are identification card. Max is a toilet.
+
+Question:
+Is the following statement true or false? Max is sour.
+
+### Output
+#### Synonym Variable Table:
+| Unified Variable      | Synonyms                                                       |
+|-----------------------|----------------------------------------------------------------|
+|   Television          | television, TV                                                 |
+|   Toilet              | toilet, WC, place for relieving oneself                        |
+|   Telephone           | telephone, phone, device for making calls                      |
+|   Refrigerator        | refrigerator, fridge, box for keeping food cold                |
+|   PersonalComputer    | personal computer, PC                                          |
+|   CompactDisc         | compact disc, CD                                               |
+|   DVD                 | digital versatile disc, DVD                                    |
+|   GPS                 | Global Positioning System, GPS                                 |
+|   AirConditioner      | air conditioner, AC                                            |
+|   IDCard              | identification card                                            |
+
+#### Logic Program:
+Predicates:
+Television($x, bool)        ::: Is x a television?
+Shy($x, bool)               ::: Is x shy?
+Toilet($x, bool)            ::: Is x a toilet?
+Aggressive($x, bool)        ::: Is x aggressive?
+Telephone($x, bool)         ::: Is x a telephone?
+Wooden($x, bool)            ::: Is x wooden?
+Refrigerator($x, bool)      ::: Is x a refrigerator?
+Red($x, bool)               ::: Is x red?
+PersonalComputer($x, bool)  ::: Is x a personal computer?
+Opaque($x, bool)            ::: Is x opaque?
+CompactDisc($x, bool)       ::: Is x a compact disc?
+DVD($x, bool)               ::: Is x a DVD?
+Sour($x, bool)              ::: Is x sour?
+GPS($x, bool)               ::: Is x a GPS?
+Earthy($x, bool)            ::: Is x earthy?
+AirConditioner($x, bool)    ::: Is x an air conditioner?
+Small($x, bool)             ::: Is x small?
+IDCard($x, bool)            ::: Is x an identification card?
+
+Facts:
+Toilet(Max, True)
+
+Rules:
+Television($x, True)        >>> Shy($x, False)
+Television($x, True)        >>> Toilet($x, True)
+Toilet($x, True)            >>> Aggressive($x, True)
+Toilet($x, True)            >>> Telephone($x, True)
+Telephone($x, True)         >>> Wooden($x, False)
+Telephone($x, True)         >>> Refrigerator($x, True)
+Refrigerator($x, True)      >>> Red($x, True)
+Refrigerator($x, True)      >>> PersonalComputer($x, True)
+PersonalComputer($x, True)  >>> Opaque($x, True)
+PersonalComputer($x, True)  >>> CompactDisc($x, True)
+DVD($x, True)               >>> Sour($x, True)
+CompactDisc($x, True)       >>> Sour($x, False)
+CompactDisc($x, True)       >>> GPS($x, True)
+GPS($x, True)               >>> Earthy($x, True)
+GPS($x, True)               >>> AirConditioner($x, True)
+AirConditioner($x, True)    >>> Small($x, True)
+AirConditioner($x, True)    >>> IDCard($x, True)
+
+Query:
+Sour(Max, True)
+
+### Input
+Context:
+television are mean. TV are toilet. Each WC is not happy. Each that place for relieving oneself is a telephone. Each phone is not temperate. Each that device for making calls is a refrigerator. fridge are not large. that box for keeping food cold are personal computer. Every PC is earthy. Each that machine for computing is a compact disc. CD are blue. Every that disc for storing music or data is a digital versatile disc. DVD are not dull. that disc for watching movies are Global Positioning System. Each air conditioner is dull. GPS are sour. that system for finding locations are identification card. Alex is a telephone.
+
+Question:
+Is the following statement true or false? Wren is dull.
+
+### Output
+#### Synonym Variable Table:
+| Unified Variable     | Synonyms                                                       |
+|----------------------|----------------------------------------------------------------|
+|   Television         | television, TV                                                 |
+|   Toilet             | toilet, WC, place for relieving oneself                        |
+|   Telephone          | telephone, phone, device for making calls                      |
+|   Refrigerator       | refrigerator, fridge                                           |
+|   PersonalComputer   | personal computer, PC                                          |
+|   CompactDisc        | compact disc, machine for computing                            |
+|   DVD                | digital versatile disc, DVD                                    |
+|   GPS                | Global Positioning System, disc for watching movies            |
+|   AirConditioner     | air conditioner                                                |
+|   IDCard             | identification card, system for finding locations              |
+|   Mean               | mean                                                           |
+|   Happy              | happy                                                          |
+|   Temperate          | temperate                                                      |
+|   Large              | large                                                          |
+|   Earthy             | earthy                                                         |
+|   Blue               | blue                                                           |
+|   Dull               | dull                                                           |
+|   Sour               | sour                                                           |
+
+
+#### Logic Program:
+Predicates:
+Television($x, bool)         ::: Is x a television?
+Mean($x, bool)               ::: Is x mean?
+Toilet($x, bool)             ::: Is x a toilet?
+Happy($x, bool)              ::: Is x happy?
+Telephone($x, bool)          ::: Is x a telephone?
+Temperate($x, bool)          ::: Is x temperate?
+Refrigerator($x, bool)       ::: Is x a refrigerator?
+Large($x, bool)              ::: Is x large?
+PersonalComputer($x, bool)   ::: Is x a personal computer?
+Earthy($x, bool)             ::: Is x earthy?
+CompactDisc($x, bool)        ::: Is x a compact disc?
+Blue($x, bool)               ::: Is x blue?
+DVD($x, bool)                ::: Is x a DVD?
+Dull($x, bool)               ::: Is x dull?
+GPS($x, bool)                ::: Is x a GPS?
+Sour($x, bool)               ::: Is x a sour?
+AirConditioner($x, bool)     ::: Is x an air conditioner?
+IDCard($x, bool)             ::: Is x an identification card?
+
+Facts:
+Telephone(Alex, True)
+
+Rules:
+Television($x, True)         >>> Mean($x, True)
+Television($x, True)         >>> Toilet($x, True)
+Toilet($x, True)             >>> Happy($x, False)
+Toilet($x, True)             >>> Telephone($x, True)
+Telephone($x, True)          >>> Temperate($x, False)
+Telephone($x, True)          >>> Refrigerator($x, True)
+Refrigerator($x, True)       >>> Large($x, False)
+Refrigerator($x, True)       >>> PersonalComputer($x, True)
+PersonalComputer($x, True)   >>> Earthy($x, True)
+PersonalComputer($x, True)   >>> CompactDisc($x, True)
+CompactDisc($x, True)        >>> Blue($x, True)
+CompactDisc($x, True)        >>> DVD($x, True)
+DVD($x, True)                >>> Dull($x, False)
+DVD($x, True)                >>> GPS($x, True)
+AirConditioner($x, True)     >>> Dull($x, True)
+GPS($x, True)                >>> Sour($x, True)
+GPS($x, True)                >>> IDCard($x, True)
+
+Query:
+Dull(Wren, True)
+
+
+### Input
+Context:
+television are mean. TV are toilet. Each WC is not happy. Each that place for relieving oneself is a telephone. Each phone is not temperate. Each that device for making calls is a refrigerator. fridge are not large. that box for keeping food cold are personal computer. Every PC is earthy. Each that machine for computing is a compact disc. CD are blue. Every that disc for storing music or data is a digital versatile disc. DVD are not dull. that disc for watching movies are Global Positioning System. Each air conditioner is dull. GPS are sour. that system for finding locations are identification card. Alex is a telephone.
+
+Question:
+Is the following statement true or false? Wren is dull.
+
+### Output
+#### Synonym Variable Table:
+| Unified Variable     | Synonyms                                                       |
+|----------------------|----------------------------------------------------------------|
+|   Television         | television, TV                                                 |
+|   Toilet             | toilet, WC, place for relieving oneself                        |
+|   Telephone          | telephone, phone, device for making calls                      |
+|   Refrigerator       | refrigerator, fridge                                           |
+|   PersonalComputer   | personal computer, PC                                          |
+|   CompactDisc        | compact disc, machine for computing                            |
+|   DVD                | digital versatile disc, DVD                                    |
+|   GPS                | Global Positioning System, disc for watching movies            |
+|   AirConditioner     | air conditioner                                                |
+|   IDCard             | identification card, system for finding locations              |
+|   Mean               | mean                                                           |
+|   Happy              | happy                                                          |
+|   Temperate          | temperate                                                      |
+|   Large              | large                                                          |
+|   Earthy             | earthy                                                         |
+|   Blue               | blue                                                           |
+|   Dull               | dull                                                           |
+|   Sour               | sour                                                           |
+
+#### Logic Program:
+Predicates:
+Television($x, bool)         ::: Is x a television?
+Mean($x, bool)               ::: Is x mean?
+Toilet($x, bool)             ::: Is x a toilet?
+Happy($x, bool)              ::: Is x happy?
+Telephone($x, bool)          ::: Is x a telephone?
+Temperate($x, bool)          ::: Is x temperate?
+Refrigerator($x, bool)       ::: Is x a refrigerator?
+Large($x, bool)              ::: Is x large?
+PersonalComputer($x, bool)   ::: Is x a personal computer?
+Earthy($x, bool)             ::: Is x earthy?
+CompactDisc($x, bool)        ::: Is x a compact disc?
+Blue($x, bool)               ::: Is x blue?
+DVD($x, bool)                ::: Is x a DVD?
+Dull($x, bool)               ::: Is x dull?
+GPS($x, bool)                ::: Is x a GPS?
+Sour($x, bool)               ::: Is x a sour?
+AirConditioner($x, bool)     ::: Is x an air conditioner?
+IDCard($x, bool)             ::: Is x an identification card?
+
+Facts:
+Telephone(Alex, True)
+
+Rules:
+Television($x, True)         >>> Mean($x, True)
+Television($x, True)         >>> Toilet($x, True)
+Toilet($x, True)             >>> Happy($x, False)
+Toilet($x, True)             >>> Telephone($x, True)
+Telephone($x, True)          >>> Temperate($x, False)
+Telephone($x, True)          >>> Refrigerator($x, True)
+Refrigerator($x, True)       >>> Large($x, False)
+Refrigerator($x, True)       >>> PersonalComputer($x, True)
+PersonalComputer($x, True)   >>> Earthy($x, True)
+PersonalComputer($x, True)   >>> CompactDisc($x, True)
+CompactDisc($x, True)        >>> Blue($x, True)
+CompactDisc($x, True)        >>> DVD($x, True)
+DVD($x, True)                >>> Dull($x, False)
+DVD($x, True)                >>> GPS($x, True)
+AirConditioner($x, True)     >>> Dull($x, True)
+GPS($x, True)                >>> Sour($x, True)
+GPS($x, True)                >>> IDCard($x, True)
+
+Query:
+Dull(Wren, True)
+
+
+## Input
+Context:
+Every tumpus is large. Tumpuses are wumpuses. Each wumpus is not opaque. Every dumpus is not dull. Every wumpus is a rompus. Every rompus is brown. Each rompus is a vumpus. Each vumpus is temperate. Vumpuses are jompuses. Jompuses are dull. Jompuses are numpuses. Every numpus is liquid. Each numpus is an impus. Impuses are spicy. Every impus is a yumpus. Every yumpus is not nervous. Every yumpus is a zumpus. Wren is a tumpus.
+
+Question:
+Is the following statement true or false? Wren is dull.
+
+### Output
+#### Synonym Variable Table:
+| Unified Variable | Synonyms                        |
+|------------------|---------------------------------|
+|   Tumpus         | tumpus, tumpuses                |
+|   Wumpus         | wumpus, wumpuses                |
+|   Rompus         | rompus, rompuses                |
+|   Dumpus         | dumpus, dumpuses                |
+|   Vumpus         | vumpus, vumpuses                |
+|   Jompus         | jompus, jompuses                |
+|   Numpus         | numpus, numpuses                |
+|   Impus          | impus, impuses                  |
+|   Yumpus         | yumpus, yumpuses                |
+|   Zumpus         | zumpus, zumpuses                |
+|   Large          | large                           |
+|   Opaque         | opaque                          |
+|   Dull           | dull                            |
+|   Brown          | brown                           |
+|   Temperate      | temperate                       |
+|   Liquid         | liquid                          |
+|   Spicy          | spicy                           |
+|   Nervous        | nervous                         |
+
+#### Logic Program:
+Predicates:
+Tumpus($x, bool)       ::: Does x belong to tumpus?
+Wumpus($x, bool)       ::: Does x belong to wumpus?
+Rompus($x, bool)       ::: Does x belong to rompus?
+Dumpus($x, bool)       ::: Does x belong to dumpus?
+Vumpus($x, bool)       ::: Does x belong to vumpus?
+Jompus($x, bool)       ::: Does x belong to jompus?
+Numpus($x, bool)       ::: Does x belong to numpus?
+Impus($x, bool)        ::: Does x belong to impus?
+Yumpus($x, bool)       ::: Does x belong to yumpus?
+Zumpus($x, bool)       ::: Does x belong to zumpus?
+Large($x, bool)        ::: Is x large?
+Opaque($x, bool)       ::: Is x opaque?
+Dull($x, bool)         ::: Is x dull?
+Brown($x, bool)        ::: Is x brown?
+Temperate($x, bool)    ::: Is x temperate?
+Liquid($x, bool)       ::: Is x liquid?
+Spicy($x, bool)        ::: Is x spicy?
+Nervous($x, bool)      ::: Is x nervous?
+
+Facts:
+Tumpus(Wren, True)
+
+Rules:
+Tumpus($x, True)       >>> Large($x, True)
+Tumpus($x, True)       >>> Wumpus($x, True)
+Wumpus($x, True)       >>> Opaque($x, False)
+Dumpus($x, True)       >>> Dull($x, False)
+Wumpus($x, True)       >>> Rompus($x, True)
+Rompus($x, True)       >>> Brown($x, True)
+Rompus($x, True)       >>> Vumpus($x, True)
+Vumpus($x, True)       >>> Temperate($x, True)
+Vumpus($x, True)       >>> Jompus($x, True)
+Jompus($x, True)       >>> Dull($x, True)
+Jompus($x, True)       >>> Numpus($x, True)
+Numpus($x, True)       >>> Liquid($x, True)
+Numpus($x, True)       >>> Impus($x, True)
+Impus($x, True)        >>> Spicy($x, True)
+Impus($x, True)        >>> Yumpus($x, True)
+Yumpus($x, True)       >>> Nervous($x, False)
+Yumpus($x, True)       >>> Zumpus($x, True)
+
+Query:
+Dull(Wren, True)
+
+------
+
+### Input
+Context:
+[[PROBLEM]]
+
+Question:
+[[QUESTION]]
+
+### Output

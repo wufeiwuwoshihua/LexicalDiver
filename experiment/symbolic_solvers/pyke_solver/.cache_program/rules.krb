@@ -1,0 +1,101 @@
+fact1
+	foreach
+		facts.Television($x, True)
+	assert
+		facts.Sour($x, True)
+
+fact2
+	foreach
+		facts.Television($x, True)
+	assert
+		facts.Toilet($x, True)
+
+fact3
+	foreach
+		facts.Toilet($x, True)
+	assert
+		facts.Bright($x, True)
+
+fact4
+	foreach
+		facts.Toilet($x, True)
+	assert
+		facts.Telephone($x, True)
+
+fact5
+	foreach
+		facts.Telephone($x, True)
+	assert
+		facts.Large($x, False)
+
+fact6
+	foreach
+		facts.Telephone($x, True)
+	assert
+		facts.Refrigerator($x, True)
+
+fact7
+	foreach
+		facts.Refrigerator($x, True)
+	assert
+		facts.Metallic($x, True)
+
+fact8
+	foreach
+		facts.Refrigerator($x, True)
+	assert
+		facts.PersonalComputer($x, True)
+
+fact9
+	foreach
+		facts.PersonalComputer($x, True)
+	assert
+		facts.Angry($x, False)
+
+fact10
+	foreach
+		facts.PersonalComputer($x, True)
+	assert
+		facts.CompactDisc($x, True)
+
+fact11
+	foreach
+		facts.CompactDisc($x, True)
+	assert
+		facts.Shy($x, False)
+
+fact12
+	foreach
+		facts.CompactDisc($x, True)
+	assert
+		facts.DVD($x, True)
+
+fact13
+	foreach
+		facts.DVD($x, True)
+	assert
+		facts.Opaque($x, False)
+
+fact14
+	foreach
+		facts.DVD($x, True)
+	assert
+		facts.GPS($x, True)
+
+fact15
+	foreach
+		facts.AirConditioner($x, True)
+	assert
+		facts.Blue($x, False)
+
+fact16
+	foreach
+		facts.GPS($x, True)
+	assert
+		facts.Blue($x, True)
+
+fact17
+	foreach
+		facts.GPS($x, True)
+	assert
+		facts.IDCard($x, True)

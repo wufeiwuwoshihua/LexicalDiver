@@ -1,0 +1,87 @@
+Given a problem description and a question. The task is to parse the problem and the question into first-order logic formulars. Please provide a program directly in the example format, other textual expressions like "The logic program for each problem is presented below:" should not be included in your answer.
+The grammar of the first-order logic formular is defined as follows:
+1) logical conjunction of expr1 and expr2: expr1 ∧ expr2
+2) logical disjunction of expr1 and expr2: expr1 ∨ expr2
+3) logical exclusive disjunction of expr1 and expr2: expr1 ⊕ expr2
+4) logical negation of expr1: ¬expr1
+5) expr1 implies expr2: expr1 → expr2
+6) expr1 if and only if expr2: expr1 ↔ expr2
+7) logical universal quantification: ∀x
+8) logical existential quantification: ∃x
+------
+Premises:
+All coffee drinkers are caffeine-dependent. Every person either drinks coffee or teases about caffeine addiction. No one teasing about caffeine addiction is ignorant of caffeine being a drug. Lena is either a student who is ignorant of caffeine being a drug or neither a student nor ignorant of it. If Lena is not both caffeine-dependent and a student, then she is either both caffeine-dependent and a student or neither.
+Question: 
+- Is it true, false, or uncertain that Lena either teases about caffeine addiction or is ignorant of caffeine being a drug?  
+- Is it true, false, or uncertain that if Lena is either both teasing about caffeine addiction and ignorant of caffeine being a drug or neither, then she teases about caffeine addiction and drinks coffee?
+###
+Premises:  
+∀x (Drinks(x) → Dependent(x)) ::: All coffee drinkers are caffeine-dependent.
+∀x (Drinks(x) ⊕ Teases(x)) ::: Every person either drinks coffee or teases about caffeine addiction.
+∀x (Teases(x) → ¬ Ignorant(x)) ::: No one teasing about caffeine addiction is ignorant of caffeine being a drug.
+(Student(lena) ∧ Ignorant(lena)) ⊕ ¬(Student(lena) ∨ Ignorant(lena)) ::: Lena is either a student who is ignorant of caffeine being a drug or neither a student nor ignorant of it.
+¬(Dependent(lena) ∧ Student(lena)) → ((Dependent(lena) ∧ Student(lena)) ⊕ ¬(Dependent(lena) ∨ Student(lena))) ::: If Lena is not both caffeine-dependent and a student, then she is either both caffeine-dependent and a student or neither.
+Question:  
+Teases(lena) ⊕ Ignorant(lena) ::: Lena either teases about caffeine addiction or is ignorant of caffeine being a drug.
+((Teases(lena) ∧ Ignorant(lena)) ⊕ ¬(Teases(lena) ∨ Ignorant(lena))) → (Teases(lena) ∧ Drinks(lena)) ::: If Lena is either both teasing about caffeine addiction and ignorant of caffeine being a drug or neither, then she teases about caffeine addiction and drinks coffee.
+---
+Premises:  
+Jan Novak, a Czech composer, focused on Baroque music. All composers are musicians. Some musicians enjoy music. Jan Novak released a book in 1950 titled "Baroque Techniques."
+Question:  
+- Is it true, false, or uncertain that Jan Novak enjoyed music?  
+- Is it true, false, or uncertain that a Czech individual authored a book in 1950?  
+- Is it true, false, or uncertain that no composer focused on Baroque music?
+###
+Premises:  
+Czech(jan) ∧ Composer(jan) ∧ Focus(jan, baroque) ::: Jan Novak, a Czech composer, focused on Baroque music.
+∀x (Composer(x) → Musician(x)) ::: All composers are musicians.  
+∃x (Musician(x) ∧ Enjoy(x, music)) ::: Some musicians enjoy music.
+Book(baroqueTechniques) ∧ Author(jan, baroqueTechniques) ∧ Publish(baroqueTechniques, year1950)  ::: Jan Novak released a book in 1950 titled "Baroque Techniques."
+Question:  
+Enjoy(jan, music) ::: Jan Novak enjoyed music.  
+∃x ∃y (Czech(x) ∧ Author(x, y) ∧ Book(y) ∧ Publish(y, year1950)) ::: A Czech individual authored a book in 1950.  
+¬ ∃x (Composer(x) ∧ Focus(x, baroque)) ::: No composer focused on Baroque music.
+---
+Premises:  
+Ailton Silva, born in 1995, is commonly known as Ailton.
+Ailton is a football player who was loaned out to Braga.
+Ailton Silva is a Brazillian footballer who plays for Nautico.
+Nautico is a football club along with Braga.
+Fluminense is a football club.
+Question:  
+Is the following statement true or false? Ailton was not loaned out to a football club.
+###
+Premises:  
+BornIn(ailtonsilva, 1995) ∧ CommonlyKnownAs(ailtonsilva, ailton) ::: Ailton Silva, born in 1995, is commonly known as Ailton.
+FootballPlayer(ailton) ∧ LoanedTo(ailton, braga) ::: Ailton is a football player who was loaned out to Braga.
+Brazilian(ailtonsilva) ∧ FootballPlayer(ailtonsilva) ∧ PlaysFor(ailtonsilva, nautico) ::: Ailton Silva is a Brazillian footballer who plays for Nautico.
+FootballClub(nautico) ∧ FootballClub(braga) ::: Nautico is a football club along with Braga.
+FootballClub(fluminense) ::: Fluminense is a football club.
+Question:  
+∀x (FootballClub(x) → ¬ LoanedTo(ailton, x)) ::: Ailton was not loaned out to a football club.
+---
+Premises:  
+If an animal barks, then Jane does not like it.
+All dogs are animals that bark.
+If an animal jumps, then Jane likes it.
+If an animal has legs, then it jumps.
+If an animal is terricolous, then it has legs. 
+If KiKi neither jumps nor has legs, then KiKi is terricolous or has legs.
+Question:  
+Is the following statement true or false? KiKi neither barks nor is a dog.
+###
+Premises:  
+∀x (Bark(x) → ¬ Like(jane, x)) ::: If an animal barks, then Jane does not like it.
+∀x (Dog(x) → Bark(x)) ::: All dogs are animals that bark.
+∀x (Jump(x) → Like(jane, x)) ::: If an animal jumps, then Jane likes it.
+∀x (HaveLegs(x) → Jump(x)) ::: If an animal has legs, then it jumps.
+∀x (Terricolous(x) → HaveLegs(x)) ::: If an animal is terricolous, then it has legs. 
+(¬ Jump(kiki) ∧ ¬ HaveLegs(kiki)) → (Terricolous(kiki) ∨ HaveLegs(kiki)) ::: If KiKi neither jumps nor has legs, then KiKi is terricolous or has legs.
+Question:  
+¬ Bark(kiki) ∧ ¬ Dog(kiki) ::: KiKi neither barks nor is a dog.
+---
+Premises:  
+[[PROBLEM]]
+Question:  
+[[QUESTION]]
+###

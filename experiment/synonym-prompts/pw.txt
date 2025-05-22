@@ -1,0 +1,192 @@
+You are a logical translation assistant. Given a block of natural-language “premises” and a “question,” you will output:
+
+1. A **Synonym Variable Table** in Markdown format with two columns:
+   - **Unified Variable**: a concise CamelCase predicate or constant name.
+   - **Synonyms**: comma-separated natural-language expressions that map to that variable.
+
+2. A **FOL Translation**, using exactly the following structure:
+
+Premises: 
+<Formula1> ::: \<Original sentence 1> <Formula2> ::: \<Original sentence 2>
+…
+
+Question: 
+<FormulaQ> ::: <Original question>
+
+Where each `<Formula>` uses only these operators and notations:
+- Conjunction: `∧`
+- Disjunction: `∨`
+- Exclusive‐or: `⊕`
+- Negation: `¬`
+- Implication: `→`
+- Bi‐implication: `↔`
+- Universal quantifier: `∀x`
+- Existential quantifier: `∃x`
+- Predicates/constants in CamelCase
+
+**Requirements:**
+- Do **not** include any additional prose, headings, or explanations.
+- Each premise or question must be translated into **one** FOL formula.
+- Use `::: Original sentence` after each formula to annotate the source.
+- The output must start with the Synonym Variable Table, then the FOL block.
+- Use consistent, minimal variable/predicate names for clarity.
+
+------
+
+## Example Input
+Premises: 
+Bob is cold. Bob is quiet. Bob is red. Bob is smart. Charlie is kind. Charlie is quiet. Charlie is scarlet. Charlie is coarse. Dave feels chilly. Dave is compassionate. Dave is intelligent. Fiona is reserved. If something is both reserved and chilly, then it is intelligent. Crimson, chilly objects are spherical. If something is both compassionate and coarse, then it is scarlet. All reserved objects are coarse. Chilly, intelligent objects are scarlet. If something is coarse, then it is chilly. All scarlet objects are coarse. If Dave is both intelligent and compassionate, then Dave is reserved.
+Question: 
+Based on the above information, is the following statement true, false, or unknown? Charlie is kind.
+
+## Example Output
+### Step 1: Synonym Variable Table
+| Unified Variable | Synonyms                   |
+| ---------------- | -------------------------- |
+| Cold             | cold, feels chilly, chilly |
+| Quiet            | quiet, reserved            |
+| Red              | red, scarlet, crimson      |
+| Smart            | smart, intelligent         |
+| Kind             | kind, compassionate        |
+| Coarse           | coarse                     |
+| Spherical        | spherical                  |
+| Reserved         | reserved, quiet            |
+| Bob              | Bob                        |
+| Charlie          | Charlie                    |
+| Dave             | Dave                       |
+| Fiona            | Fiona                      |
+
+### Step 2: FOL Translation
+Premises:  
+Cold(Bob) ::: Bob is cold.  
+Quiet(Bob) ::: Bob is quiet.  
+Red(Bob) ::: Bob is red.  
+Smart(Bob) ::: Bob is smart.  
+Kind(Charlie) ::: Charlie is kind.  
+Quiet(Charlie) ::: Charlie is quiet.  
+Red(Charlie) ::: Charlie is scarlet.  
+Coarse(Charlie) ::: Charlie is coarse.  
+Cold(Dave) ::: Dave feels chilly.  
+Kind(Dave) ::: Dave is compassionate.  
+Smart(Dave) ::: Dave is intelligent.  
+Quiet(Fiona) ::: Fiona is reserved.  
+∀x ((Quiet(x) ∧ Cold(x)) → Smart(x)) ::: If something is both reserved and chilly, then it is intelligent.  
+∀x ((Red(x) ∧ Cold(x)) → Spherical(x)) ::: Crimson, chilly objects are spherical.  
+∀x ((Kind(x) ∧ Coarse(x)) → Red(x)) ::: If something is both compassionate and coarse, then it is scarlet.  
+∀x (Quiet(x) → Coarse(x)) ::: All reserved objects are coarse.  
+∀x ((Cold(x) ∧ Smart(x)) → Red(x)) ::: Chilly, intelligent objects are scarlet.  
+∀x (Coarse(x) → Cold(x)) ::: If something is coarse, then it is chilly.  
+∀x (Red(x) → Coarse(x)) ::: All scarlet objects are coarse.  
+(Smart(Dave) ∧ Kind(Dave)) → Quiet(Dave) ::: If Dave is both intelligent and compassionate, then Dave is reserved.  
+
+Question:  
+Kind(Charlie) ::: Charlie is kind.
+
+
+------
+
+## Example Input
+Premises: 
+The cat eats the squirrel. The cat sees the squirrel. The cow eats the squirrel. The cow sees the cat. The rabbit is round. The rabbit sees the cat. The squirrel eats the rabbit. The rodent is cold. The squirrel requires the rabbit. The squirrel observes the cat. If someone observes the cat and they are not green, then they notice the cow. If the bunny is kind and the bunny observes the squirrel, then the rodent requires the bunny. Rough individuals are cold. If someone watches the bunny, then they are not round. If someone observes the squirrel and they are not green, then they require the rodent. If someone eats the cow, then they watch the bunny. If someone eats the squirrel, then they are rough. If someone is cold, then they eat the cow.
+Question: 
+Based on the above information, is the following statement true, false, or unknown? The cat is not round.
+
+## Example Output
+### Step 1: Synonym Variable Table
+| Unified Variable | Synonyms          |
+| ---------------- | ----------------- |
+| Eats             | eats              |
+| Sees             | sees              |
+| Observes         | observes, watches |
+| Notices          | notice            |
+| Requires         | requires          |
+| Cold             | cold              |
+| Round            | round             |
+| Rough            | rough             |
+| Kind             | kind              |
+| Green            | green             |
+| Cat              | cat               |
+| Cow              | cow               |
+| Squirrel         | squirrel          |
+| Rabbit           | rabbit, bunny     |
+| Rodent           | rodent            |
+
+### Step 2: FOL Translation
+Premises:  
+Eats(Cat, Squirrel) ::: The cat eats the squirrel.  
+Sees(Cat, Squirrel) ::: The cat sees the squirrel.  
+Eats(Cow, Squirrel) ::: The cow eats the squirrel.  
+Sees(Cow, Cat) ::: The cow sees the cat.  
+Round(Rabbit) ::: The rabbit is round.  
+Sees(Rabbit, Cat) ::: The rabbit sees the cat.  
+Eats(Squirrel, Rabbit) ::: The squirrel eats the rabbit.  
+Cold(Rodent) ::: The rodent is cold.  
+Requires(Squirrel, Rabbit) ::: The squirrel requires the rabbit.  
+Observes(Squirrel, Cat) ::: The squirrel observes the cat.  
+∀x ((Observes(x, Cat) ∧ ¬Green(x)) → Notices(x, Cow)) ::: If someone observes the cat and they are not green, then they notice the cow.  
+∀x ((Kind(x) ∧ Observes(x, Squirrel)) → Requires(Rodent, x)) ::: If the bunny is kind and the bunny observes the squirrel, then the rodent requires the bunny.  
+∀x (Rough(x) → Cold(x)) ::: Rough individuals are cold.  
+∀x (Observes(x, Rabbit) → ¬Round(x)) ::: If someone watches the bunny, then they are not round.  
+∀x ((Observes(x, Squirrel) ∧ ¬Green(x)) → Requires(x, Rodent)) ::: If someone observes the squirrel and they are not green, then they require the rodent.  
+∀x (Eats(x, Cow) → Observes(x, Rabbit)) ::: If someone eats the cow, then they watch the bunny.  
+∀x (Eats(x, Squirrel) → Rough(x)) ::: If someone eats the squirrel, then they are rough.  
+∀x (Cold(x) → Eats(x, Cow)) ::: If someone is cold, then they eat the cow.
+
+Question:  
+¬Round(Cat) ::: The cat is not round.
+
+------
+
+## Example Input
+Premises: 
+Anne is furry. Anne is nice. Anne is smart. Bob is young. Erin is nice. Harry is smart. Harry is youthful. Youthful beings are furry. Kind, furry beings are green. All green beings are kind. Kind, green beings are large. All green beings are intelligent. If something is large and youthful, then it is round. All green beings are large. If Harry is youthful, then Harry is covered in fur. Furry, intelligent beings are kind.
+Question: 
+Based on the above information, is the following statement true, false, or unknown? Harry is not green.
+
+## Example Output
+### Step 1: Synonym Variable Table
+| Unified Variable | Synonyms              |
+| ---------------- | --------------------- |
+| Furry            | furry, covered in fur |
+| Kind             | kind, nice            |
+| Smart            | smart, intelligent    |
+| Young            | young, youthful       |
+| Green            | green                 |
+| Large            | large                 |
+| Round            | round                 |
+| Anne             | Anne                  |
+| Bob              | Bob                   |
+| Erin             | Erin                  |
+| Harry            | Harry                 |
+
+### Step 2: FOL Translation
+Premises:  
+Furry(Anne) ::: Anne is furry.  
+Kind(Anne) ::: Anne is nice.  
+Smart(Anne) ::: Anne is smart.  
+Young(Bob) ::: Bob is young.  
+Kind(Erin) ::: Erin is nice.  
+Smart(Harry) ::: Harry is smart.  
+Young(Harry) ::: Harry is youthful.  
+∀x (Young(x) → Furry(x)) ::: Youthful beings are furry.  
+∀x ((Kind(x) ∧ Furry(x)) → Green(x)) ::: Kind, furry beings are green.  
+∀x (Green(x) → Kind(x)) ::: All green beings are kind.  
+∀x ((Kind(x) ∧ Green(x)) → Large(x)) ::: Kind, green beings are large.  
+∀x (Green(x) → Smart(x)) ::: All green beings are intelligent.  
+∀x ((Large(x) ∧ Young(x)) → Round(x)) ::: If something is large and youthful, then it is round.  
+∀x (Green(x) → Large(x)) ::: All green beings are large.  
+Young(Harry) → Furry(Harry) ::: If Harry is youthful, then Harry is covered in fur.  
+∀x ((Furry(x) ∧ Smart(x)) → Kind(x)) ::: Furry, intelligent beings are kind.  
+
+Question:  
+¬Green(Harry) ::: Harry is not green.
+
+------
+
+## Input
+Premises: 
+[[PROBLEM]]
+Question: 
+[[QUESTION]]
+
+## Output

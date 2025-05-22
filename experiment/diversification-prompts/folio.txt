@@ -1,0 +1,101 @@
+Revised Prompt:
+You are given a logic puzzle described in natural language. Your task is to **rewrite only the context** by referring to the same entities (e.g., objects, people) using **one natural synonymous expression** for the **second occurrence** of each entity. For the first occurrence, use the original term. For the second occurrence, replace the original term with a clear, natural synonym, description, or alias that unambiguously refers to the same entity. For any subsequent occurrences, you may reuse the original term or the synonymous expression, prioritizing clarity and natural language flow. Do not overuse synonyms or force unnatural replacements.
+Keep the logic of the original problem consistent, preserving all logical relationships described in the context. Do not rewrite the question or options.
+At the end, list the entity reference groups showing which expressions refer to the same underlying object or entity (i.e., the original term and its one synonymous replacement).
+
+---
+
+#### Original Version:
+**context:**
+There are five books: a green book, a blue book, a white book, a purple book, and a yellow book.  
+The blue book is to the right of the yellow book.  
+The white book is to the left of the yellow book.  
+The blue book is the second from the right.  
+The purple book is the second from the left.  
+
+**question:**
+Which of the following is true?  
+
+#### Rewritten Version (context only with one natural synonymous replacement per entity):
+context:
+There are five books: a green book, a blue book, a white book, a purple book, and a yellow book.  
+The azure novel is to the right of the golden volume.  
+The pale book is to the left of the yellow book.  
+The blue book is the second from the right.  
+The violet book is the second from the left.
+
+**Entity reference groups:**
+- "green book" = (no synonym, as it appears only once)
+- "blue book" = "azure novel"
+- "yellow book" = "golden volume"
+- "white book" = "pale book"
+- "purple book" = "violet book"
+
+---
+
+#### Original Version:
+context:
+In an antique car show, there are five vehicles: a convertible, a sedan, a tractor, a minivan, and a limousine.  
+The tractor is newer than the minivan.  
+The tractor is older than the limousine.  
+The convertible is older than the sedan.  
+The convertible is the second-newest.
+
+question:
+Which of the following is true?  
+
+#### Rewritten Version (context only with one natural synonymous replacement per entity):
+context:
+In an antique car show, there are five vehicles: a convertible, a sedan, a tractor, a minivan, and a limousine.  
+The farming vehicle is newer than the family van.  
+The tractor is older than the luxury ride.  
+The open-top car is older than the sedan.  
+The convertible is the second-newest.
+
+Entity reference groups:
+"convertible" = "open-top car"
+"sedan" = (no synonym, as the second occurrence retains the original term)
+"tractor" = "farming vehicle"
+"minivan" = "family van"
+"limousine" = "luxury ride"
+
+---
+
+#### Original Version:
+context:
+If people perform in school talent shows often, then they attend and are very engaged with school events.
+People either perform in school talent shows often or are inactive and disinterested members of their community.
+If people chaperone high school dances, then they are not students who attend the school.
+All people who are inactive and disinterested members of their community chaperone high school dances.
+All young children and teenagers who wish to further their academic careers and educational opportunities are students who attend the school.
+Bonnie either both attends and is very engaged with school events and is a student who attends the school, or she neither attends and is very engaged with school events nor is a student who attends the school.
+
+question:
+Is the following statement true or false? If Bonnie is either both a young child or teenager who wishes to further her academic career and educational opportunities and chaperones high school dances or neither is a young child nor teenager who wishes to further her academic career and educational opportunities, then Bonnie is either a student who attends the school or is an inactive and disinterested member of the community. 
+
+#### Rewritten Version (context only with one natural synonymous replacement per entity):
+context:
+Individuals who frequently perform in campus talent showcases typically attend and are highly involved in campus events.
+People either often take part in school talent shows or are disinterested and uninvolved members of their community.
+If someone serves as a monitor at campus dances, they are not enrolled as students at that school.
+All disinterested and uninvolved members of the community serve as chaperones at high school dances.
+All young individuals aspiring to advance their academic pursuits and educational prospects are enrolled as students at the school.
+Bonnie either both actively participates in school events and is enrolled as a student at the school, or she neither participates in school events nor is enrolled as a student there.
+
+Entity reference groups:
+"convertible" = "open-top car"
+"sedan" = (no synonym, as the second occurrence retains the original term)
+"tractor" = "farming vehicle"
+"minivan" = "family van"
+"limousine" = "luxury ride"
+
+---
+
+### Original version:
+context:
+[[PROBLEM]]
+
+question:
+[[QUESTION]]
+
+### Your rewritten version (context only with varied expressions):

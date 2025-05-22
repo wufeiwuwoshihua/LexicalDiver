@@ -1,0 +1,156 @@
+I have the following synonym table:
+
+| Full Name                | Abbreviation | Reference                              |
+|--------------------------|--------------|----------------------------------------|
+| television               | TV           | that screen for watching shows         |
+| toilet                   | WC           | that place for relieving oneself       |
+| telephone                | phone        | that device for making calls           |
+| refrigerator             | fridge       | that box for keeping food cold         |
+| personal computer        | PC           | that machine for computing             |
+| compact disc             | CD           | that disc for storing music or data    |
+| digital versatile disc   | DVD          | that disc for watching movies          |
+| Global Positioning System| GPS          | that system for finding locations      |
+| air conditioner          | AC           | that machine for cooling air           |
+| identification card      | ID           | that card proving a person’s identity  |
+| artificial intelligence  | AI           | that technology for simulating human thought |
+
+For the given text and question below, identify any entities (words) that appear repeatedly. For each entity that recurs, replace its occurrences according to these rules:
+1. The first occurrence should be replaced by the corresponding "Full Name" from the table.
+2. The second occurrence should be replaced by the corresponding "Abbreviation".
+3. The third occurrence should be replaced by the corresponding "Reference".
+4. If the entity appears more than three times, for any additional occurrences use Abbreviation.
+
+Each distinct repeated entity should be assigned one unique row from the synonym table. 
+
+### Input
+
+Context: 
+Every tumpus is not angry. Tumpuses are rompuses. Every numpus is not bright. Rompuses are not luminous. Rompuses are yumpuses. Yumpuses are transparent. Yumpuses are zumpuses. Each zumpus is not bitter. Zumpuses are impuses. Impuses are red. Each impus is a dumpus. Every dumpus is happy. Each dumpus is a vumpus. Vumpuses are bright. Every vumpus is a jompus. Jompuses are large. Each jompus is a wumpus. Stella is a yumpus.
+
+Question: 
+Is the following statement true or false? Stella is bright.
+
+### Output
+
+Mapping of Entities:
+1. tumpus/Tumpuses is assigned row 1 (television, TV, that screen for watching shows)
+   - 1st occurrence → television
+   - 2nd occurrence → TV
+
+2. rompuses/Rompuses is assigned row 2 (toilet, WC, that place for relieving oneself)
+   - 1st occurrence → toilet
+   - 2nd occurrence → WC
+   - 3rd occurrence → that place for relieving oneself
+
+3. yumpuses/Yumpuses is assigned row 3 (telephone, phone, that device for making calls)
+   - 1st occurrence → telephone
+   - 2nd occurrence → phone
+   - 3rd occurrence → that device for making calls
+   - (Subsequent occurrences use Abbreviation)
+
+4. zumpus/Zumpuses is assigned row 4 (refrigerator, fridge, that box for keeping food cold)
+   - 1st occurrence → refrigerator
+   - 2nd occurrence → fridge
+   - 3rd occurrence → that box for keeping food cold
+
+5. impuses/Impuses/impus is assigned row 5 (personal computer, PC, that machine for computing)
+   - 1st occurrence → personal computer
+   - 2nd occurrence → PC
+   - 3rd occurrence → that machine for computing
+
+6. dumpus/Dumpuses is assigned row 6 (compact disc, CD, that disc for storing music or data)
+   - 1st occurrence → compact disc
+   - 2nd occurrence → CD
+   - 3rd occurrence → that disc for storing music or data
+
+7. vumpus/Vumpuses is assigned row 7 (digital versatile disc, DVD, that disc for watching movies)
+   - 1st occurrence → digital versatile disc
+   - 2nd occurrence → DVD
+   - 3rd occurrence → that disc for watching movies
+
+8. jompus/Jompuses is assigned row 8 (Global Positioning System, GPS, that system for finding locations)
+   - 1st occurrence → Global Positioning System
+   - 2nd occurrence → GPS
+   - 3rd occurrence → that system for finding locations
+
+Entities that appear only once (like numpus and wumpus) remain unchanged.
+
+Rewritten Text:
+Every television is not angry. TV are toilet. Every numpus is not bright. WC are not luminous. that place for relieving oneself are telephone. phone are transparent. that device for making calls are refrigerator. Each fridge is not bitter. that box for keeping food cold are personal computer. PC are red. Each that machine for computing is a compact disc. Every CD is happy. Each that disc for storing music or data is a digital versatile disc. DVD are bright. Every that disc for watching movies is a Global Positioning System. GPS are large. Each that system for finding locations is a wumpus. Stella is a telephone.
+
+Question remains unchanged:
+Is the following statement true or false? Stella is bright.
+
+### Input
+
+Context: 
+Vumpuses are floral. Vumpuses are tumpuses. Tumpuses are brown. Each tumpus is a wumpus. Wumpuses are small. Each wumpus is a rompus. Each zumpus is metallic. Every rompus is happy. Rompuses are impuses. Each impus is amenable. Each impus is a dumpus. Every dumpus is not metallic. Dumpuses are numpuses. Each numpus is bitter. Each numpus is a jompus. Every jompus is cold. Each jompus is a yumpus. Wren is a tumpus.
+
+Question: 
+Is the following statement true or false? Wren is not metallic.
+
+### Output
+
+Mapping of Entities:
+
+1. vumpus/Vumpuses → Row 1 (television, TV, that screen for watching shows)  
+   - 1st occurrence → television  
+   - 2nd occurrence → TV
+
+2. tumpus/Tumpuses → Row 2 (toilet, WC, that place for relieving oneself)  
+   - 1st occurrence → toilet  
+   - 2nd occurrence → WC  
+   - 3rd occurrence → that place for relieving oneself
+
+3. wumpus/Wumpuses → Row 3 (telephone, phone, that device for making calls)  
+   - 1st occurrence → telephone  
+   - 2nd occurrence → phone  
+   - 3rd occurrence → that device for making calls
+
+4. rompus/Rompuses → Row 4 (refrigerator, fridge, that box for keeping food cold)  
+   - 1st occurrence → refrigerator  
+   - 2nd occurrence → fridge  
+   - 3rd occurrence → that box for keeping food cold
+
+5. zumpus/Zumpuses → Row 5 (personal computer, PC, that machine for computing)  
+   - 1st occurrence → personal computer
+
+6. impus/Impuses → Row 6 (compact disc, CD, that disc for storing music or data)  
+   - 1st occurrence → compact disc  
+   - 2nd occurrence → CD  
+   - 3rd occurrence → that disc for storing music or data
+
+7. dumpus/Dumpuses → Row 7 (digital versatile disc, DVD, that disc for watching movies)  
+   - 1st occurrence → digital versatile disc  
+   - 2nd occurrence → DVD  
+   - 3rd occurrence → that disc for watching movies
+
+8. numpus/Numpuses → Row 8 (Global Positioning System, GPS, that system for finding locations)  
+   - 1st occurrence → Global Positioning System  
+   - 2nd occurrence → GPS  
+   - 3rd occurrence → that system for finding locations
+
+9. jompus/Jompuses → Row 9 (air conditioner, AC, that machine for cooling air)  
+   - 1st occurrence → air conditioner  
+   - 2nd occurrence → AC
+
+10. yumpus/Yumpuses → Row 10 (identification card, ID, that card proving a person’s identity)  
+    - 1st occurrence → identification card
+
+Entities that appear only once (like Wren) remain unchanged.
+
+Rewritten Text:
+TV are floral. TV are toilet. WC are brown. Each that place for relieving oneself is a telephone. phone are small. Each that device for making calls is a refrigerator. Each personal computer is metallic. Every fridge is happy. that box for keeping food cold are compact disc. Each CD is amenable. Each that disc for storing music or data is a digital versatile disc. Every DVD is not metallic. that disc for watching movies are Global Positioning System. Each GPS is bitter. Each that system for finding locations is an air conditioner. Every AC is cold. Each air conditioner is an identification card. Wren is a toilet.
+
+Question remains unchanged:
+Is the following statement true or false? Wren is not metallic.
+
+### Input
+
+Context:
+[[PROBLEM]]
+
+QUESTION:
+[[QUESTION]]
+
+### Output

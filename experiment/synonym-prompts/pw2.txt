@@ -1,0 +1,213 @@
+You are given a free‐text context describing a series of categorical statements and a question. Your task is to convert it into a Prolog‐style logic program in five steps:
+
+1.   Synonym Variable Table    
+   • Scan the context and identify all concept expressions that refer to the same underlying Unified Variable (e.g. “television” and “TV”).  
+   • Create a Markdown table with two columns: the unified Variable name and all its synonyms from the context.
+
+2.   Predicates:    
+   • List each predicate with its arity and a brief English description in the format:  
+     `PredicateName($x, bool) ::: Description`
+
+3.   Facts:    
+   • Extract every explicit “X is a Y” statement from the context and encode it as a fact:  
+     `PredicateName(Entity, True)`  
+   • Make sure to use the unified predicate names from your synonym table.
+
+4.   Rules:    
+   • For each “Every/Each A is B” or “A are not B” sentence, write a rule in the form:  
+     `PredicateA($x, True) >>> PredicateB($x, True)`  
+     or  
+     `PredicateA($x, True) >>> PredicateB($x, False)`  
+   • Use the unified predicate names consistently.
+
+5.   Query:    
+   • Translate the final question into a query, e.g.:  
+     `PredicateName(Target, True)` or `PredicateName(Target, False)`
+
+Do not include any narrative text or explanations—only the synonym table and the Prolog program segments (Predicates, Facts, Rules, Query).
+
+------
+
+### Input
+Context:
+Bob is cold. Bob is quiet. Bob is red. Bob is smart. Charlie is kind. Charlie is quiet. Charlie is scarlet. Charlie is coarse. Dave feels chilly. Dave is compassionate. Dave is intelligent. Fiona is reserved. If something is both reserved and chilly, then it is intelligent. Crimson, chilly objects are spherical. If something is both compassionate and coarse, then it is scarlet. All reserved objects are coarse. Chilly, intelligent objects are scarlet. If something is coarse, then it is chilly. All scarlet objects are coarse. If Dave is both intelligent and compassionate, then Dave is reserved.
+
+Question:
+Based on the above information, is the following statement true, false, or unknown? Charlie is kind.
+
+### Output
+#### Synonym Variable Table
+| Unified Variable | Synonyms              |
+| ---------------- | --------------------- |
+| cold             | cold, chilly          |
+| quiet            | quiet, reserved       |
+| red              | red, scarlet, crimson |
+| smart            | smart, intelligent    |
+| kind             | kind, compassionate   |
+| coarse           | coarse                |
+| spherical        | spherical             |
+
+#### Logic Program
+Predicates:
+Cold($x, bool) ::: $x is cold/chilly
+Quiet($x, bool) ::: $x is quiet/reserved
+Red($x, bool) ::: $x is red/scarlet/crimson
+Smart($x, bool) ::: $x is smart/intelligent
+Kind($x, bool) ::: $x is kind/compassionate
+Coarse($x, bool) ::: $x is coarse
+Spherical($x, bool) ::: $x is spherical
+Facts:
+Cold(Bob, True)
+Quiet(Bob, True)
+Red(Bob, True)
+Smart(Bob, True)
+Kind(Charlie, True)
+Quiet(Charlie, True)
+Red(Charlie, True)
+Coarse(Charlie, True)
+Cold(Dave, True)
+Kind(Dave, True)
+Smart(Dave, True)
+Quiet(Fiona, True)
+Rules:
+Quiet($x, True) && Cold($x, True) >>> Smart($x, True)
+Red($x, True) && Cold($x, True) >>> Spherical($x, True)
+Kind($x, True) && Coarse($x, True) >>> Red($x, True)
+Quiet($x, True) >>> Coarse($x, True)
+Cold($x, True) && Smart($x, True) >>> Red($x, True)
+Coarse($x, True) >>> Cold($x, True)
+Red($x, True) >>> Coarse($x, True)
+Smart(Dave, True) && Kind(Dave, True) >>> Quiet(Dave, True)
+Query:
+Kind(Charlie, True)
+
+------
+
+### Input
+Context:
+Anne is furry. Anne is nice. Anne is smart. Bob is young. Erin is nice. Harry is smart. Harry is youthful. Youthful beings are furry. Kind, furry beings are green. All green beings are kind. Kind, green beings are large. All green beings are intelligent. If something is large and youthful, then it is round. All green beings are large. If Harry is youthful, then Harry is covered in fur. Furry, intelligent beings are kind.
+
+Question:
+Based on the above information, is the following statement true, false, or unknown? Harry is not green.
+
+### Output
+#### Synonym Variable Table
+
+| Unified Variable | Synonyms              |
+| ---------------- | --------------------- |
+| furry            | furry, covered in fur |
+| nice             | nice, kind            |
+| smart            | smart, intelligent    |
+| young            | young, youthful       |
+| green            | green                 |
+| large            | large                 |
+| round            | round                 |
+
+#### Logic Program
+Predicates:
+Furry($x, bool) ::: $x is furry or covered in fur
+Nice($x, bool) ::: $x is nice or kind
+Smart($x, bool) ::: $x is smart or intelligent
+Young($x, bool) ::: $x is young or youthful
+Green($x, bool) ::: $x is green
+Large($x, bool) ::: $x is large
+Round($x, bool) ::: $x is round
+
+Facts:
+Furry(Anne, True)
+Nice(Anne, True)
+Smart(Anne, True)
+Young(Bob, True)
+Nice(Erin, True)
+Smart(Harry, True)
+Young(Harry, True)
+
+Rules:
+Young($x, True) >>> Furry($x, True)
+Nice($x, True) && Furry($x, True) >>> Green($x, True)
+Green($x, True) >>> Nice($x, True)
+Nice($x, True) && Green($x, True) >>> Large($x, True)
+Green($x, True) >>> Smart($x, True)
+Large($x, True) && Young($x, True) >>> Round($x, True)
+Green($x, True) >>> Large($x, True)
+Young(Harry, True) >>> Furry(Harry, True)
+Furry($x, True) && Smart($x, True) >>> Nice($x, True)
+
+Query:
+Green(Harry, False)
+
+------
+
+### Input
+Context:
+The bald eagle eats the bear. The bald eagle eats the cat. The bald eagle eats the rabbit. The bald eagle is young. The bald eagle likes the bear. The bald eagle sees the cat. The bald eagle sees the rabbit. The bear eats the bald eagle. The cat eats the bald eagle. The feline likes the rabbit. The rabbit is round. The rabbit sees the bald eagle. If someone eats the bald eagle and they see the rabbit, then they are round. If someone eats the bald eagle and they eat the rabbit, then the rabbit likes the feline. If someone is youthful and they eat the rabbit, then the rabbit sees the feline. If someone eats the rabbit and the rabbit is cold, then they are blue. If the rabbit sees the feline and the rabbit is round, then the feline eats the rabbit. If the bird of prey sees the bear and the bald eagle likes the bear, then the bald eagle is red. If someone eats the rabbit and they are blue, then they eat the bald eagle. If someone likes the feline, then the cat is round. If the rabbit likes the feline and the feline is round, then the rabbit is blue.
+
+Question:
+Based on the above information, is the following statement true, false, or unknown? The rabbit does not like the cat.
+
+### Output
+#### Synonym Variable Table
+| Unified Variable | Synonyms              |
+|------------------|-----------------------|
+| bald_eagle       | bald eagle, bird of prey |
+| bear             | bear                  |
+| cat              | cat, feline           |
+| rabbit           | rabbit                |
+| eats             | eats                  |
+| likes            | likes                 |
+| sees             | sees                  |
+| young            | young, youthful       |
+| round            | round                 |
+| cold             | cold                  |
+| blue             | blue                  |
+| red              | red                   |
+
+#### Logic Program
+Predicates:
+Eats($x, $y, bool) ::: $x eats $y
+Likes($x, $y, bool) ::: $x likes $y
+Sees($x, $y, bool) ::: $x sees $y
+Young($x, bool) ::: $x is young/youthful
+Round($x, bool) ::: $x is round
+Cold($x, bool) ::: $x is cold
+Blue($x, bool) ::: $x is blue
+Red($x, bool) ::: $x is red
+
+Facts:
+Eats(bald_eagle, bear, True)
+Eats(bald_eagle, cat, True)
+Eats(bald_eagle, rabbit, True)
+Young(bald_eagle, True)
+Likes(bald_eagle, bear, True)
+Sees(bald_eagle, cat, True)
+Sees(bald_eagle, rabbit, True)
+Eats(bear, bald_eagle, True)
+Eats(cat, bald_eagle, True)
+Likes(cat, rabbit, True)
+Round(rabbit, True)
+Sees(rabbit, bald_eagle, True)
+
+Rules:
+Eats($x, bald_eagle, True) && Sees($x, rabbit, True) >>> Round($x, True)
+Eats($x, bald_eagle, True) && Eats($x, rabbit, True) >>> Likes(rabbit, cat, True)
+Young($x, True) && Eats($x, rabbit, True) >>> Sees(rabbit, cat, True)
+Eats($x, rabbit, True) && Cold(rabbit, True) >>> Blue($x, True)
+Sees(rabbit, cat, True) && Round(rabbit, True) >>> Eats(cat, rabbit, True)
+Sees(bald_eagle, bear, True) && Likes(bald_eagle, bear, True) >>> Red(bald_eagle, True)
+Eats($x, rabbit, True) && Blue($x, True) >>> Eats($x, bald_eagle, True)
+Likes($x, cat, True) >>> Round(cat, True)
+Likes(rabbit, cat, True) && Round(cat, True) >>> Blue(rabbit, True)
+
+Query:
+Likes(rabbit, cat, False)
+
+------
+
+### Input
+Context:
+[[PROBLEM]]
+
+Question:
+[[QUESTION]]
+
+### Output

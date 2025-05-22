@@ -1,0 +1,170 @@
+You are given a problem description involving a set of entities and their relative properties or positions. Your task is to represent the problem as a constraint satisfaction problem in five steps:
+
+1. Synonym Variable Table    
+   • Scan the context and identify all concept expressions that refer to the same underlying Unified Variable (e.g. “television” and “TV”).  
+   • Create a Markdown table with two columns: the unified Variable name and all its synonyms from the context.
+
+2. Domain:
+   • Define the numeric range for relevant qualities (e.g., position, age, price) using intuitive magnitudes.
+   • For example: `1` should represent the *newest* (smallest age) or *leftmost*, and `N` the *oldest* or *rightmost*, where N is the number of entities.
+
+3. Variables:
+   • List each entity as a variable.
+   • Specify the domain of values each variable can take.
+   • Use the format: `Entity [IN] [1, ..., N]`
+
+4. Constraints:
+   • Translate each explicit and implicit constraint from the problem into a formal condition.
+   • Use relational expressions (`==`, `<`, `>`, etc.) with brief English explanations.
+   • Always include an `AllDifferentConstraint([...])` when applicable to enforce uniqueness.
+
+5. Query:
+   • Convert each multiple-choice answer into a query condition.
+   • Use format: `OptionLabel) Expression ::: English interpretation`
+
+------
+
+### Example Input 
+Problem:
+The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nIn an antique car show, there are three vehicles: a station wagon, a convertible, and a minivan. The station wagon is the oldest. The minivan is newer than the convertible.
+Question:
+Which of the following is true?
+Options:
+A) The station wagon is the second-newest.
+B) The convertible is the second-newest.
+C) The minivan is the second-newest.
+### Example Output
+#### Synonym Variable Table
+
+| Unified Variable | Synonyms                     |
+| ---------------- | ---------------------------- |
+| StationWagon     | station wagon                |
+| Convertible      | convertible                  |
+| Minivan          | minivan                      |
+
+#### Logic Program:
+Domain:
+1: newest
+3: oldest
+Variables:
+StationWagon [IN] [1, 2, 3]
+Convertible [IN] [1, 2, 3]
+Minivan [IN] [1, 2, 3]
+Constraints:
+StationWagon == 3 ::: The station wagon is the oldest.
+Minivan > Convertible ::: The Minivan is newer than the convertible.
+AllDifferentConstraint([StationWagon, Convertible, Minivan]) ::: All vehicles have different values.
+Query:
+A) StationWagon == 2 ::: The station wagon is the second-newest.
+B) Convertible == 2 ::: The convertible is the second-newest.
+C) Minivan == 2 ::: The minivan is the second-newest.
+
+------
+
+### Example Input 
+Problem:
+In an antique car show, there are five vehicles: a convertible, a sedan, a tractor, a minivan, and a limousine.  \nThe farm vehicle is newer than the family van.  \nThe farm vehicle is older than the stretch car.  \nThe drop-top is older than the saloon.  \nThe drop-top is the second-newest.
+Question:
+Which of the following is true?  
+Options: 
+A) The convertible is the second-newest.
+B) The sedan is the second-newest.
+C) The tractor is the second-newest.
+D) The minivan is the second-newest.
+E) The limousine is the second-newest.
+
+### Example Output
+#### Synonym Variable Table
+
+| Unified Variable | Synonyms               |
+| ---------------- | ---------------------- |
+| Convertible      | convertible, drop-top  |
+| Sedan            | sedan, saloon          |
+| Tractor          | tractor, farm vehicle  |
+| Minivan          | minivan, family van    |
+| Limousine        | limousine, stretch car |
+
+#### Logic Program:
+Domain:
+1: newest
+5: oldest
+Variables:
+Convertible [IN] [1, 2, 3, 4, 5]
+Sedan [IN] [1, 2, 3, 4, 5]
+Tractor [IN] [1, 2, 3, 4, 5]
+Minivan [IN] [1, 2, 3, 4, 5]
+Limousine [IN] [1, 2, 3, 4, 5]
+Constraints:
+Tractor < Minivan ::: The farm vehicle is newer than the family van.
+Tractor > Limousine ::: The farm vehicle is older than the stretch car.
+Convertible > Sedan ::: The drop-top is older than the saloon.
+Convertible == 2 ::: The drop-top is the second-newest.
+AllDifferentConstraint([Convertible, Sedan, Tractor, Minivan, Limousine]) ::: All vehicles have different ages.
+Query:
+A) Convertible == 2 ::: The convertible is the second-newest.
+B) Sedan == 2 ::: The sedan is the second-newest.
+C) Tractor == 2 ::: The tractor is the second-newest.
+D) Minivan == 2 ::: The minivan is the second-newest.
+E) Limousine == 2 ::: The limousine is the second-newest.
+
+------
+
+### Input
+Problem:
+A fruit stand sells five fruits: mangoes, kiwis, plums, pears, and watermelons.  \nThe green exotics are less expensive than the purple drupes.  \nThe juicy pomes are the third-most expensive.  \nThe green exotics are the second-cheapest.  \nThe heavy gourds are the most expensive.
+Question:
+Which of the following is true?  
+Options: 
+A) The mangoes are the third-most expensive.
+B) The kiwis are the third-most expensive.
+C) The plums are the third-most expensive.
+D) The pears are the third-most expensive.
+E) The watermelons are the third-most expensive.
+
+### Output
+#### Synonym Variable Table
+
+| Unified Variable | Synonyms                  |
+| ---------------- | ------------------------- |
+| Mangoes          | mangoes                   |
+| Kiwis            | kiwis, green exotics      |
+| Plums            | plums, purple drupes      |
+| Pears            | pears, juicy pomes        |
+| Watermelons      | watermelons, heavy gourds |
+
+#### Logic Program
+Domain:
+1: cheapest
+5: most expensive
+
+Variables：
+Mangoes [IN] [1, 2, 3, 4, 5]
+Kiwis [IN] [1, 2, 3, 4, 5]
+Plums [IN] [1, 2, 3, 4, 5]
+Pears [IN] [1, 2, 3, 4, 5]
+Watermelons [IN] [1, 2, 3, 4, 5]
+
+Constraints:
+Kiwis < Plums ::: The green exotics are less expensive than the purple drupes.
+Pears == 3 ::: The juicy pomes are the third-most expensive.
+Kiwis == 2 ::: The green exotics are the second-cheapest.
+Watermelons == 5 ::: The heavy gourds are the most expensive.
+AllDifferentConstraint([Mangoes, Kiwis, Plums, Pears, Watermelons]) ::: All fruits have different prices.
+
+Query:
+A) Mangoes == 3 ::: The mangoes are the third-most expensive.
+B) Kiwis == 3 ::: The kiwis are the third-most expensive.
+C) Plums == 3 ::: The plums are the third-most expensive.
+D) Pears == 3 ::: The pears are the third-most expensive.
+E) Watermelons == 3 ::: The watermelons are the third-most expensive.
+
+------
+
+### Input
+Problem:
+[[PROBLEM]]
+Question:
+[[QUESTION]]
+Options:
+[[CHOICES]]
+### Output

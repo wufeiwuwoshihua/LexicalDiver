@@ -1,0 +1,79 @@
+You are given a paragraph that lists a set of five objects (or items) and then makes several statements referring back to those objects. Your goal is to rewrite the paragraph so that:
+
+1. **Step 1: Identify and Define**
+
+   * Extract the five distinct object phrases as they first appear (e.g. “a blue book,” “a yellow book,” etc.).
+   * Count how many times each phrase appears in the entire paragraph.
+   * For any phrase that appears **more than once**, assign a clear, unambiguous synonym or equivalent expression to be used for **all subsequent mentions** (never replace the very first occurrence).
+
+2. **Step 2: Rewrite Text**
+
+   * Reproduce the original paragraph, but replace every **second and later** occurrence of each multi-use phrase with its assigned synonym.
+   * Do not alter any other words, sentence order, punctuation, or overall structure.
+   * Keep single-use phrases exactly as they appeared.
+
+------
+
+## Example Input
+The following paragraphs each describe a set of five objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a shelf, there are five books: a green book, a blue book, a white book, a purple book, and a yellow book. The blue book is to the right of the yellow book. The white book is to the left of the yellow book. The blue book is the second from the right. The purple book is the second from the left.
+
+## Example Output
+### Step 1: Identify and Define
+1. "a green book" appears 1 time → no replace
+2. "a blue book" appears 2 times → replace subsequent mentions with "the azure volume"
+3. "a white book" appears 2 times → replace subsequent mentions with "the pale tome"
+4. "a purple book" appears 2 times → replace subsequent mentions with "the violet edition"
+5. "a yellow book" appears 3 times → replace subsequent mentions with "the golden copy"
+
+### Step 2: Rewrite Text
+On a shelf, there are five books: a green book, a blue book, a white book, a purple book, and a yellow book.
+The azure volume is to the right of the golden copy.
+The pale tome is to the left of the golden copy.
+The azure volume is the second from the right.
+The violet edition is the second from the left.
+
+------
+
+## Example Input
+The following paragraphs each describe a set of five objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nIn an antique car show, there are five vehicles: a convertible, a sedan, a tractor, a minivan, and a limousine. The tractor is newer than the minivan. The tractor is older than the limousine. The convertible is older than the sedan. The convertible is the second-newest.
+
+## Example Output
+### Step 1: Identify and Define
+1. "a convertible" appears 2 times → replace subsequent mentions with "the drop-top"
+2. "a sedan" appears 2 times → replace subsequent mentions with "the saloon"
+3. "a tractor" appears 3 times → replace subsequent mentions with "the farm vehicle"
+4. "a minivan" appears 2 times → replace subsequent mentions with "the family van"
+5. "a limousine" appears 2 times → replace subsequent mentions with "the stretch car"
+
+### Step 2: Rewrite Text
+In an antique car show, there are five vehicles: a station wagon, a sedan, a tractor, a motorcyle, and a limousine.
+The farm vehicle is newer than the two-wheeler.
+The two-wheeler is newer than the saloon.
+The stretch car is the oldest.
+The estate car is the newest.
+
+------
+
+## Example Input
+### Step 1: Identify and Define
+
+1. "watermelons" appears 2 times → replace subsequent mentions with "the heavy gourds"
+2. "plums" appears 2 times → replace subsequent mentions with "the purple drupes"
+3. "apples" appears 2 times → replace subsequent mentions with "the crisp fruits"
+4. "peaches" appears 3 times → replace subsequent mentions with "the fuzzy stone fruits"
+5. "kiwis" appears 2 times → replace subsequent mentions with "the green exotics"
+
+### Step 2: Rewrite Text
+
+A fruit stand sells five fruits: watermelons, plums, apples, peaches, and kiwis.
+The crisp fruits are less expensive than the fuzzy stone fruits.
+The purple drupes are the cheapest.
+The green exotics are the second-cheapest.
+The heavy gourds are more expensive than the fuzzy stone fruits.
+
+------
+
+## Input
+[[PROBLEM]]
+
+## Output

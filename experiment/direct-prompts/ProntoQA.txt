@@ -1,0 +1,153 @@
+Task Description: You are given a problem description and a question. The task is to: 
+1) define all the predicates in the problem
+2) parse the problem into logic rules based on the defined predicates
+3) write all the facts mentioned in the problem
+4) parse the question into the logic form
+Please provide a program directly in the example format, other textual expressions like "The logic program for each problem is presented below:" should not be included in your answer.
+------
+Problem:
+Each jompus is fruity. Every jompus is a wumpus. Every wumpus is not transparent. Wumpuses are tumpuses. Tumpuses are mean. Tumpuses are vumpuses. Every vumpus is cold. Each vumpus is a yumpus. Yumpuses are orange. Yumpuses are numpuses. Numpuses are dull. Each numpus is a dumpus. Every dumpus is not shy. Impuses are shy. Dumpuses are rompuses. Each rompus is liquid. Rompuses are zumpuses. Alex is a tumpus.
+Question:
+True or false: Alex is not shy.
+###
+Predicates:
+Jompus($x, bool) ::: Does x belong to Jompus?
+Fruity($x, bool) ::: Is x fruity?
+Wumpus($x, bool) ::: Does x belong to Wumpus?
+Transparent($x, bool) ::: Is x transparent?
+Tumpuses($x, bool) ::: Does x belong to Tumpuses?
+Mean($x, bool) ::: Is x mean?
+Vumpuses($x, bool) ::: Does x belong to Vumpuses?
+Cold($x, bool) ::: Is x cold?
+Yumpus($x, bool) ::: Does x belong to Yumpus?
+Orange($x, bool) ::: Is x orange?
+Numpus($x, bool) ::: Does x belong to Numpus?
+Dull($x, bool) ::: Is x dull?
+Dumpus($x, bool) ::: Does x belong to Dumpus?
+Shy($x, bool) ::: Is x shy?
+Impuses($x, bool) ::: Does x belong to Impuses?
+Rompus($x, bool) ::: Does x belong to Rompus?
+Liquid($x, bool) ::: Is x liquid?
+Zumpus($x, bool) ::: Does x belong to Zumpus?
+Facts:
+Tumpuses(Alex, True)
+Rules:
+Jompus($x, True) >>> Fruity($x, True)
+Jompus($x, True) >>> Wumpus($x, True)
+Wumpus($x, True) >>> Transparent($x, False)
+Wumpuses($x, True) >>> Tumpuses($x, True)
+Tumpuses($x, True) >>> Mean($x, True)
+Tumpuses($x, True) >>> Vumpuses($x, True)
+Vumpuses($x, True) >>> Cold($x, True)
+Vumpuses($x, True) >>> Yumpus($x, True)
+Yumpus($x, True) >>> Orange($x, True)
+Yumpus($x, True) >>> Numpus($x, True)
+Numpus($x, True) >>> Dull($x, True)
+Numpus($x, True) >>> Dumpus($x, True)
+Dumpus($x, True) >>> Shy($x, False)
+Impuses($x, True) >>> Shy($x, True)
+Dumpus($x, True) >>> Rompus($x, True)
+Rompus($x, True) >>> Liquid($x, True)
+Rompus($x, True) >>> Zumpus($x, True)
+Query:
+Shy(Alex, False)
+------
+Problem:
+Every tumpus is not angry. Tumpuses are rompuses. Every numpus is not bright. Rompuses are not luminous. Rompuses are yumpuses. Yumpuses are transparent. Yumpuses are zumpuses. Each zumpus is not bitter. Zumpuses are impuses. Impuses are red. Each impus is a dumpus. Every dumpus is happy. Each dumpus is a vumpus. Vumpuses are bright. Every vumpus is a jompus. Jompuses are large. Each jompus is a wumpus. Stella is a yumpus.
+Question:
+Is the following statement true or false? Stella is bright.
+###
+Predicates:
+Tumpus($x, bool) ::: Does x belong to Tumpus?
+Angry($x, bool) ::: Is x angry?
+Rompus($x, bool) ::: Does x belong to Rompus?
+Numpus($x, bool) ::: Does x belong to Numpus?
+Bright($x, bool) ::: Is x bright?
+Luminous($x, bool) ::: Is x luminous?
+Yumpus($x, bool) ::: Does x belong to Yumpus?
+Transparent($x, bool) ::: Is x transparent?
+Zumpus($x, bool) ::: Does x belong to Zumpus?
+Bitter($x, bool) ::: Is x bitter?
+Impuses($x, bool) ::: Does x belong to Impuses?
+Red($x, bool) ::: Is x red?
+Dumpus($x, bool) ::: Does x belong to Dumpus?
+Happy($x, bool) ::: Is x happy?
+Vumpus($x, bool) ::: Does x belong to Vumpus?
+Jompus($x, bool) ::: Does x belong to Jompus?
+Large($x, bool) ::: Is x large?
+Wumpus($x, bool) ::: Does x belong to Wumpus?
+Facts:
+Yumpus(Stella, True)
+Rules:
+Tumpus($x, True) >>> Angry($x, False)
+Tumpus($x, True) >>> Rompus($x, True)
+Numpus($x, True) >>> Bright($x, False)
+Rompus($x, True) >>> Luminous($x, False)
+Rompus($x, True) >>> Yumpus($x, True)
+Yumpus($x, True) >>> Transparent($x, True)
+Yumpus($x, True) >>> Zumpus($x, True)
+Zumpus($x, True) >>> Bitter($x, False)
+Zumpus($x, True) >>> Impuses($x, True)
+Impuses($x, True) >>> Red($x, True)
+Impuses($x, True) >>> Dumpus($x, True)
+Dumpus($x, True) >>> Happy($x, True)
+Dumpus($x, True) >>> Vumpus($x, True)
+Vumpus($x, True) >>> Bright($x, True)
+Vumpus($x, True) >>> Jompus($x, True)
+Jompus($x, True) >>> Large($x, True)
+Jompus($x, True) >>> Wumpus($x, True)
+Query:
+Bright(Stella, True)
+------
+Problem:
+Vumpuses are floral. Vumpuses are tumpuses. Tumpuses are brown. Each tumpus is a wumpus. Wumpuses are small. Each wumpus is a rompus. Each zumpus is metallic. Every rompus is happy. Rompuses are impuses. Each impus is amenable. Each impus is a dumpus. Every dumpus is not metallic. Dumpuses are numpuses. Each numpus is bitter. Each numpus is a jompus. Every jompus is cold. Each jompus is a yumpus. Wren is a tumpus.
+Question:
+Is the following statement true or false? Wren is not metallic.
+###
+Predicates:
+Vumpus($x, bool) ::: Does x belong to Vumpus?
+Floral($x, bool) ::: Is x floral?
+Tumpus($x, bool) ::: Does x belong to Tumpus?
+Brown($x, bool) ::: Is x brown?
+Wumpus($x, bool) ::: Does x belong to Wumpus?
+Small($x, bool) ::: Is x small?
+Rompus($x, bool) ::: Does x belong to Rompus?
+Zumpus($x, bool) ::: Does x belong to Zumpus?
+Metallic($x, bool) ::: Is x metallic?
+Happy($x, bool) ::: Is x happy?
+Impuses($x, bool) ::: Does x belong to Impuses?
+Amenable($x, bool) ::: Is x amenable?
+Dumpus($x, bool) ::: Does x belong to Dumpus?
+Numpus($x, bool) ::: Does x belong to Numpus?
+Bitter($x, bool) ::: Is x bitter?
+Jompus($x, bool) ::: Does x belong to Jompus?
+Cold($x, bool) ::: Is x cold?
+Yumpus($x, bool) ::: Does x belong to Yumpus?
+Facts:
+Tumpus(Wren, True)
+Rules:
+Vumpus($x, True) >>> Floral($x, True)
+Vumpus($x, True) >>> Tumpus($x, True)
+Tumpus($x, True) >>> Brown($x, True)
+Tumpus($x, True) >>> Wumpus($x, True)
+Wumpus($x, True) >>> Small($x, True)
+Wumpus($x, True) >>> Rompus($x, True)
+Zumpus($x, True) >>> Metallic($x, True)
+Rompus($x, True) >>> Happy($x, True)
+Rompus($x, True) >>> Impuses($x, True)
+Impuses($x, True) >>> Amenable($x, True)
+Impuses($x, True) >>> Dumpus($x, True)
+Dumpus($x, True) >>> Metallic($x, False)
+Dumpus($x, True) >>> Numpus($x, True)
+Numpus($x, True) >>> Bitter($x, True)
+Numpus($x, True) >>> Jompus($x, True)
+Jompus($x, True) >>> Cold($x, True)
+Jompus($x, True) >>> Yumpus($x, True)
+Query:
+Metallic(Wren, False)
+------
+Problem:
+[[PROBLEM]]
+Question:
+[[QUESTION]]
+###

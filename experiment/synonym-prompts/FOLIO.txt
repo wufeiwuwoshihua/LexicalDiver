@@ -1,0 +1,298 @@
+You are tasked with parsing natural language statements into First-Order Logic (FOL) while maintaining a consistent symbol definition table. Follow these steps:
+
+1. **Initialize the Predicate Definition Table**: Begin with an empty table containing columns: "Predicate," "Predicate Meaning," and "Appearing Sentences."
+
+2. **Translate Each Sentence**:
+   - Convert each sentence into an accurate logic parse.
+   - Check the Symbol (Include Predicate and Constant) Definition Table:
+      1. If an existing symbol has the same meaning, update your logic parse to reuse it (synonyms in different expressions should use the same symbol).
+      2. If an existing symbol’s meaning is encompassed by the current one (e.g., existing: "x goes to school"; current: "x goes to school and joined a club"), update your logic parse to reuse the existing symbol. 
+      3. If an existing symbol’s meaning encompasses the current one (e.g., existing: "x goes to school and joins a club"; current: "x goes to school"), replace the definition in the table with the current symbol’s definition. 
+      4. If the current symbol is entirely new , add it to the table.
+    - Every time when you replace one row in the table with a new one, clear the column "Appearing Sentences" in the table and restart the convert from the first sentence.
+    - Every time when you provid a logic parse, start a Symbol Check.
+
+3. **Final Output**:
+   - Provide:
+     - The completed predicate definition table.
+     - Logic Parse.
+       - Premises.
+       - Question.
+
+-----
+
+# Example that you need to imitation
+
+# Input
+Premises:
+"Stranger Things" is a popular Netflix show.
+If a Netflix show is popular, Karen will binge-watch it.
+If and only if Karen binge-watches a Netflix show, she will download it.
+
+Question:
+Is the following statement true or false? Karen will download "Stranger Things".
+
+# Output
+
+<think>
+
+## Step 1: Initialize the Symbol Definition Table
+We begin with an empty table containing the columns "Symbol", "Symbol Meaning", and "Appearing Sentences."
+
+| Symbol | Symbol Meaning | Appearing Sentences |
+|--------|----------------|---------------------|
+|        |                |                     |
+
+## Step 2: Convert Each Sentence
+
+### Sentence 1: "Stranger Things" is a popular Netflix show.
+Logic Parse: 
+  PopularNetflix(ST)
+Symbol Check:
+1. Symbol: PopularNetflix(x)
+   Meaning: x is a popular Netflix show
+   Table Check: Table is empty, no existing Symbols.
+   Rule 4: Current Symbol is entirely new.
+2. Symbol: ST
+   Meaning: Stranger Things
+   Table Check: Table is empty, no existing Symbols.
+   Rule 4: Current Symbol is entirely new.
+**Update the Symbol Definition Table**: Add the new symbols.
+  
+| Symbol             | Symbol Meaning              | Appearing Sentences |
+|--------------------|-----------------------------|---------------------|
+| PopularNetflix(x) | x is a popular Netflix show | Sentence 1          |
+| ST                | "Stranger Things"           | Sentence 1          |
+
+**Continue to Convert Next Sentence**
+
+### Sentence 2: If a Netflix show is popular, Karen will binge-watch it.
+Logic Parse: 
+  ∀x (PopularNetflix(x) → BingeWatch(k, x))
+Symbol Check:
+1. Symbol: PopularNetflix(x)
+   Meaning: x is a popular Netflix show
+   Table Check: Exists with same meaning and arity 
+   Rule 1: Reuse.
+**Already the same predicate, no need to update FOL**
+2. Symbol: BingeWatch(k, x)
+   Meaning: Karen binge-watches show x
+   Table Check: Not in table.
+   Rule 4: Current predicate is entirely new.
+3. Symbol: k
+   Meaning: Karen
+   Table Check: Not in table.
+   Rule 4: Current predicate is entirely new.
+**Update the Symbol Definition Table**: Add BingeWatch(k, x), k and update PopularNetflix(x)’s appearing sentences.
+
+| Symbol             | Symbol Meaning              | Appearing Sentences |
+|--------------------|-----------------------------|---------------------|
+| PopularNetflix(x) | x is a popular Netflix show | Sentence 1, 2       |
+| ST                | "Stranger Things"           | Sentence 1          |
+| BingeWatch(k, x)  | Karen binge-watches show x  | Sentence 2          |
+| k                 | Karen                       | Sentence 2          |
+
+### Sentence 3: If and only if Karen binge-watches a Netflix show, she will download it.
+Logic Parse: 
+  ∀x (NetflixShow(x) → (BingeWatch(k, x) ↔ Download(k, x)))
+Symbol Check:
+1. Symbol: NetflixShow(x)
+   Meaning: x is a Netflix show
+   Table Check: PopularNetflix(x) (x is a popular Netflix show) encompasses "x is a Netflix show and popular," so it includes NetflixShow(x). 
+   Rule 3: Existing predicate’s meaning encompasses the current one. replace the definition in the table with the current predicate’s definition.
+
+**Update the Symbol Definition Table**: Replace PopularNetflix(x) with NetflixShow(x)
+| Symbol             | Symbol Meaning              | Appearing Sentences |
+|--------------------|-----------------------------|---------------------|
+| NetflixShow(x)     | x is a Netflix show         | Sentence 1, 2       |
+| ST                | "Stranger Things"           | Sentence 1          |
+| BingeWatch(k, x)  | Karen binge-watches show x  | Sentence 2          |
+| k                 | Karen                       | Sentence 2          |
+
+**Replaced one row in the table with a new one.**
+**Clear the column "Appearing Sentences" in the table and restart the convert from the first sentence**
+
+| Symbol             | Symbol Meaning              | Appearing Sentences |
+|--------------------|-----------------------------|---------------------|
+| NetflixShow(x)    | x is a Netflix show         |                     |
+| ST                | "Stranger Things"           |                     |
+| BingeWatch(k, x)  | Karen binge-watches show x  |                     |
+| k                 | Karen                       |                     |
+
+## Restart Step 2: Convert Each Sentence
+
+### Sentence 1: "Stranger Things" is a popular Netflix show.
+Logic Parse:
+  PopularNetflix(ST)
+Symbol Check:
+  1. Symbol: PopularNetflix(x)
+   Meaning: x is a popular Netflix show
+   Table Check: NetflixShow(x)'s meaning is encompassed by PopularNetflix(x) 
+   Rule 2: Update logic parse to reuse
+**Update the Logic Parse**:
+To reuse NetflixShow(x) instead of using PopularNetflix, the new Logic Parse will be:
+  NetflixShow(ST) ∧ Popular(ST)
+Symbol Check:    
+1. Symbol: NetflixShow(x)  
+   Meaning: Stranger Things  
+   Table Check: Exists in the table with the same meaning.  
+   Rule 1: Reuse.  
+2. Symbol: ST  
+   Meaning: x is a Netflix show  
+   Table Check: Exists in the table with the same meaning.  
+   Rule 1: Reuse NetflixShow(x).  
+3. Symbol: Popular(x)  
+   Meaning: x is popular   
+   Table Check: Not in the table.  
+   Rule 4: Current predicate is entirely new.
+
+**Update the Symbol Definition Table**:  
+Add Popular(x) and update NetflixShow(x)’s appearing sentences.
+
+| Symbol             | Symbol Meaning              | Appearing Sentences |
+|--------------------|-----------------------------|---------------------|
+| NetflixShow(x)    | x is a Netflix show         | Sentence 1          |
+| ST                | "Stranger Things"           | Sentence 1          |
+| BingeWatch(k, x)  | Karen binge-watches show x  |                     |
+| k                 | Karen                       |                     |
+| Popular(x)        | x is popular                |  Sentence 1         |
+
+### Sentence 2: If a Netflix show is popular, Karen will binge-watch it.
+Logic Parse:
+∀x ((NetflixShow(x) ∧ Popular(x)) → BingeWatch(k, x))
+
+Symbol Check:
+1. Symbol: NetflixShow(x)
+   Meaning: x is a Netflix show
+   Table Check: Exists with same meaning.
+   Rule 1: Reuse
+
+2. Symbol: Popular(x)
+   Meaning: x is popular
+   Table Check: Exists with same meaning.
+   Rule 1: Reuse
+
+3. Symbol: BingeWatch(k, x)
+   Meaning: Karen binge-watches show x
+   Table Check: Exists with same meaning.
+   Rule 1: Reuse
+
+4. Symbol: k
+   Meaning: Karen
+   Table Check: Exists with same meaning.
+   Rule 1: Reuse
+
+**Update Symbol Table**: Add Sentence 2 to relevant symbols’ "Appearing Sentences".
+| Symbol           | Symbol Meaning             | Appearing Sentences    |
+| ---------------- | -------------------------- | ---------------------- |
+| NetflixShow(x)   | x is a Netflix show        | Sentence 1, Sentence 2 |
+| ST               | "Stranger Things"          | Sentence 1             |
+| BingeWatch(k, x) | Karen binge-watches show x | Sentence 2             |
+| k                | Karen                      | Sentence 2             |
+| Popular(x)       | x is popular               | Sentence 1, Sentence 2 |
+
+### Sentence 3: If and only if Karen binge-watches a Netflix show, she will download it.
+
+Logic Parse:
+∀x (NetflixShow(x) → (BingeWatch(k, x) ↔ Download(k, x)))
+
+Symbol Check:
+1. Symbol: NetflixShow(x)
+   Meaning: x is a Netflix show
+   Table Check: Exists with same meaning
+   Rule 1: Reuse
+
+2. Symbol: BingeWatch(k, x)
+   Meaning: Karen binge-watches show x
+   Table Check: Exists with same meaning
+   Rule 1: Reuse
+
+3. Symbol: k
+   Meaning: Karen
+   Table Check: Exists with same meaning.
+   Rule 1: Reuse
+
+4. Symbol: Download(k, x)
+   Meaning: Karen downloads show x
+   Table Check: Does not exist
+   Rule 4: Current predicate is entirely new
+
+
+**Update Symbol Definition Table**: Add relevant symbols with Sentence 3.
+
+| Symbol           | Symbol Meaning             | Appearing Sentences                |
+| ---------------- | -------------------------- | ---------------------------------- |
+| NetflixShow(x)   | x is a Netflix show        | Sentence 1, Sentence 2, Sentence 3 |
+| ST               | "Stranger Things"          | Sentence 1                         |
+| BingeWatch(k, x) | Karen binge-watches show x | Sentence 2, Sentence 3, Sentence 3 |
+| k                | Karen                      | Sentence 2, Sentence 3             |
+| Popular(x)       | x is popular               | Sentence 1, Sentence 2             |
+| Download(k, x)   | Karen downloads show x     | Sentence 3, Sentence 3             |
+
+### Question: Is the following statement true or false? Karen will download "Stranger Things".
+Logic Parse: 
+We need to express Karen will downloads "Stranger Things":  
+Download(k, ST)
+
+Symbol Check:  
+1. Symbol: Download(k, x) 
+   Meaning: Karen downloads show x   
+   Table Check: Exists in the table with the same meaning and arity.  
+   Rule 1: Reuse Download(k, x).
+
+2. Symbol: k
+   Meaning: Karen
+   Table Check: Exists with same meaning.
+   Rule 1: Reuse
+
+3. Symbol: ST
+   Meaning: x is a Netflix show  
+   Table Check: Exists in the table with the same meaning.  
+   Rule 1: Reuse NetflixShow(x).  
+
+
+**Update the Symbol Definition Table**:  
+Update appearing sentences for Download(k, x), k and ST.
+
+| Symbol           | Symbol Meaning             | Appearing Sentences                |
+| ---------------- | -------------------------- | ---------------------------------- |
+| NetflixShow(x)   | x is a Netflix show        | Sentence 1, Sentence 2, Sentence 3 |
+| ST               | "Stranger Things"          | Sentence 1, Question               |
+| BingeWatch(k, x) | Karen binge-watches show x | Sentence 2, Sentence 3, Sentence 3 |
+| k                | Karen                      | Sentence 2, Sentence 3, Question   |
+| Popular(x)       | x is popular               | Sentence 1, Sentence 2             |
+| Download(k, x)   | Karen downloads show x     | Sentence 3, Sentence 3, Question   |
+
+</think>
+
+## Final Output
+
+### Completed Symbol Definition Table
+| Symbol           | Symbol Meaning             | Appearing Sentences                |
+| ---------------- | -------------------------- | ---------------------------------- |
+| NetflixShow(x)   | x is a Netflix show        | Sentence 1, Sentence 2, Sentence 3 |
+| ST               | "Stranger Things"          | Sentence 1, Question               |
+| BingeWatch(k, x) | Karen binge-watches show x | Sentence 2, Sentence 3, Sentence 3 |
+| k                | Karen                      | Sentence 2, Sentence 3, Question   |
+| Popular(x)       | x is popular               | Sentence 1, Sentence 2             |
+| Download(k, x)   | Karen downloads show x     | Sentence 3, Sentence 3, Question   |
+
+### Logic Parse
+Premises:
+NetflixShow(ST) ∧ Popular(ST) ::: Stranger Things is a popular Netflix show
+∀x ((NetflixShow(x) ∧ Popular(x)) → BingeWatch(k, x)) ::: If a Netflix show is popular, Karen will binge-watch it
+∀x (NetflixShow(x) → (BingeWatch(k, x) ↔ Download(k, x))) ::: If and only if Karen binge-watches a Netflix show, she will download it
+
+Question:
+Download(k, ST) ::: Karen will download "Stranger Things"
+
+--- 
+
+# Input
+Premises:
+[[PROBLEM]]
+
+Question:
+[[QUESTION]]
+
+# Output
